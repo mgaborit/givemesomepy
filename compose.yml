@@ -1,0 +1,25 @@
+services:
+  db: 
+    image: postgres:17.2-alpine3.20
+    restart: always
+    shm_size: 128mb
+    volumes:
+      - givemesomepy-data:/var/lib/postgresql/data/
+      - ./db/1_init_db.sql:/docker-entrypoint-initdb.d/1_init_db.sql
+      - ./db/2_add_recipes.sql:/docker-entrypoint-initdb.d/2_add_recipes.sql
+    environment:
+      POSTGRES_PASSWORD: secret
+  service:
+    image: givemesomepy-backend
+    ports:
+      - 127.0.0.1:5000:5000
+    working_dir: /app
+    command: ["flask", "run", "-h", "0.0.0.0"]
+    environment:
+      - FLASK_APP=./main.py
+  # app:
+  #   image: givemesomepy-frontend
+  #   ports:
+  #     - 127.0.0.1:8080:80
+volumes:
+  givemesomepy-data:
