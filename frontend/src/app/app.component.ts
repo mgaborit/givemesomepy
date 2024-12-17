@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { RecipesApiService } from './recipes/recipes-api.service';
+//import { RouterOutlet } from '@angular/router';
+import { RecipesApiService } from './recipe/recipes-api.service';
 import { Subscription } from 'rxjs';
-import { Recipe } from './recipes/recipe.model';
+import { Recipe } from './recipe/recipe.model';
+import { RecipeComponent } from './recipe/recipe.component';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
+  imports: [RecipeComponent, CdkAccordionModule /*, RouterOutlet */],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'frontend';
@@ -22,9 +23,8 @@ export class AppComponent {
     this.recipesListSubs = this.recipesApi
       .getRecipes()
       .subscribe((res: Recipe[]) => {
-          this.recipesList = res;
-        }
-      );
+        this.recipesList = res;
+      });
   }
 
   ngOnDestroy() {
