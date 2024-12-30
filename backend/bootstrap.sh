@@ -1,4 +1,3 @@
 #!/bin/bash
-export FLASK_APP=./src/main.py
 source .venv/bin/activate
-flask run -h 0.0.0.0
+gunicorn --bind 0.0.0.0:5000 src.main:app
