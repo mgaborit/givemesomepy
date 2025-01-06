@@ -21,34 +21,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: recipe; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.recipe (
-    id bigint NOT NULL,
-    name character varying(80) NOT NULL,
-    duration integer,
-    difficulty smallint
-);
-
-
-ALTER TABLE public.recipe OWNER TO postgres;
-
---
--- Name: RECIPE_ID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.recipe ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."RECIPE_ID_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
 -- Name: ingredient; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -67,6 +39,34 @@ ALTER TABLE public.ingredient OWNER TO postgres;
 
 ALTER TABLE public.ingredient ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
     SEQUENCE NAME public.ingredient_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: recipe; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.recipe (
+    id bigint NOT NULL,
+    name character varying(80) NOT NULL,
+    duration integer,
+    difficulty smallint
+);
+
+
+ALTER TABLE public.recipe OWNER TO postgres;
+
+--
+-- Name: recipe_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.recipe ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.recipe_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -135,6 +135,13 @@ ALTER TABLE ONLY public.recipe_step
 
 
 --
+-- Name: fki_fk_recipe_ingredient_to_recipe; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_fk_recipe_ingredient_to_recipe ON public.recipe_ingredient USING btree (recipe_id);
+
+
+--
 -- Name: recipe_ingredient fk_recipe_ingredient_to_ingredient; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -147,7 +154,7 @@ ALTER TABLE ONLY public.recipe_ingredient
 --
 
 ALTER TABLE ONLY public.recipe_ingredient
-    ADD CONSTRAINT fk_recipe_ingredient_to_recipe FOREIGN KEY (recipe_id) REFERENCES public.recipe(id);
+    ADD CONSTRAINT fk_recipe_ingredient_to_recipe FOREIGN KEY (recipe_id) REFERENCES public.recipe(id) ON DELETE CASCADE;
 
 
 --
@@ -155,7 +162,7 @@ ALTER TABLE ONLY public.recipe_ingredient
 --
 
 ALTER TABLE ONLY public.recipe_step
-    ADD CONSTRAINT fk_recipe_step_to_recipe FOREIGN KEY (recipe_id) REFERENCES public.recipe(id);
+    ADD CONSTRAINT fk_recipe_step_to_recipe FOREIGN KEY (recipe_id) REFERENCES public.recipe(id) ON DELETE CASCADE;
 
 
 --
