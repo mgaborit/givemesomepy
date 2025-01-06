@@ -93,28 +93,14 @@ ALTER TABLE public.recipe_ingredient OWNER TO postgres;
 --
 
 CREATE TABLE public.recipe_step (
-    id bigint NOT NULL,
     recipe_id bigint NOT NULL,
     name character varying(80) NOT NULL,
-    description character varying(500)
+    description character varying(500),
+    "position" integer NOT NULL
 );
 
 
 ALTER TABLE public.recipe_step OWNER TO postgres;
-
---
--- Name: recipe_step_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.recipe_step ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.recipe_step_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
 
 --
 -- Name: recipe RECIPE_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
@@ -145,7 +131,7 @@ ALTER TABLE ONLY public.recipe_ingredient
 --
 
 ALTER TABLE ONLY public.recipe_step
-    ADD CONSTRAINT recipe_step_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT recipe_step_pkey PRIMARY KEY (recipe_id, "position");
 
 
 --
