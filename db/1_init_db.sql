@@ -135,6 +135,14 @@ ALTER TABLE ONLY public.recipe_step
 
 
 --
+-- Name: ingredient u_ingredient_name; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ingredient
+    ADD CONSTRAINT u_ingredient_name UNIQUE (name);
+
+
+--
 -- Name: fki_fk_recipe_ingredient_to_recipe; Type: INDEX; Schema: public; Owner: postgres
 --
 

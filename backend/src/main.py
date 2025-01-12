@@ -2,10 +2,12 @@ from flask import Flask
 from flask_cors import CORS
 
 from database import db_session
-from api.recipes_api import recipes_bp
+from api.ingredient import ingredient_bp
+from api.recipe import recipes_bp
 
 # create the app
 app = Flask(__name__)
+app.register_blueprint(ingredient_bp)
 app.register_blueprint(recipes_bp)
 
 CORS(app)
