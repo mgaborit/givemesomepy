@@ -23,8 +23,8 @@ def add_ingredient():
 
 @ingredient_bp.route('<int:ingredient_id>', methods=['GET'])
 def find_ingredient_by_id(ingredient_id):
-    sedchema = IngredientSchema()
-    return schema.dump(IngredientModel.query.get(ingrient_id))
+    schema = IngredientSchema()
+    return schema.dump(IngredientModel.query.get(ingredient_id))
 
 @ingredient_bp.route('<int:ingredient_id>', methods=['DELETE'])
 def delete_ingredient_by_id(ingredient_id):
