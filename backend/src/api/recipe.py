@@ -1,20 +1,28 @@
 import json
 from flask import Blueprint, request
 
-from models.recipe import RecipeModel
+from database import db_session
 
-recipes_bp = Blueprint('recipes_bp', __name__, url_prefix='/recipes')
+from models.recipe import RecipeModel
+from schemas.recipe import RecipeSchema
+
+recipes_bp = Blueprint('recipes_bp', __name__, url_prefix='/api/recipes')
 
 @recipes_bp.route('', methods=['GET'])
 def find_recipes():
-    return [r.serialize(full_detail=False) for r in RecipeModel.query.all()]
+    schema = RecipeSchema(many=True)
+    return schema.dump(RecipeModel.query.all())
 
 @recipes_bp.route('', methods=['POST'])
 def add_recipe():
+    schema = RecipeSchema()
     data = json.loads(request.data)
-    recipe = RecipeModel(**data)
-    return recipe.serialize()
+    recipe = schema.load(data, session=db_session)
+    db_session.add(recipe)
+    db_session.commit()
+    return 'OK'
 
 @recipes_bp.route('<int:recipe_id>', methods=['GET'])
 def find_recipe_by_id(recipe_id):
-    return RecipeModel.query.get(recipe_id).serialize()
+    schema = RecipeSchema()
+    return schema.dump(RecipeModel.query.get(recipe_id))

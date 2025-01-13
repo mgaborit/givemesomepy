@@ -8,8 +8,3 @@ class IngredientModel(Base):
     name: Mapped[str] = mapped_column()
     quantity_type: Mapped[int] = mapped_column()
 
-    def serialize(self) -> dict:
-        return {
-            'name': self.name, 
-            'quantity_type': self.quantity_type
-        }
