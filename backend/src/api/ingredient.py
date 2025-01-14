@@ -26,8 +26,16 @@ def find_ingredient_by_id(ingredient_id):
     schema = IngredientSchema()
     return schema.dump(IngredientModel.query.get(ingredient_id))
 
+@ingredient_bp.route('<int:ingredient_id>', methods=['PUT'])
+def update_ingredient(ingredient_id):
+    schema = IngredientSchema()
+    data = json.loads(request.data)
+    schema.load(data, session=db_session, instance=IngredientModel.query.get(ingredient_id))
+    db_session.commit()
+    return 'OK'
+
 @ingredient_bp.route('<int:ingredient_id>', methods=['DELETE'])
 def delete_ingredient_by_id(ingredient_id):
-    IngredientModel.query.filter(IngredientModel.id == ingredient_id).delete()
+    IngredientModel.query.get(ingredient_id).delete()
     db_session.commit()
     return 'OK'

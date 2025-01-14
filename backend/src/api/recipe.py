@@ -26,3 +26,17 @@ def add_recipe():
 def find_recipe_by_id(recipe_id):
     schema = RecipeSchema()
     return schema.dump(RecipeModel.query.get(recipe_id))
+
+@recipes_bp.route('<int:recipe_id>', methods=['PUT'])
+def update_ingredient(recipe_id):
+    schema = RecipeSchema()
+    data = json.loads(request.data)
+    schema.load(data, session=db_session, instance=RecipeModel.query.get(recipe_id))
+    db_session.commit()
+    return 'OK'
+
+@recipes_bp.route('<int:recipe_id>', methods=['DELETE'])
+def delete_ingredient_by_id(recipe_id):
+    RecipeModel.query.filter(RecipeModel.id == recipe_id).delete()
+    db_session.commit()
+    return 'OK'
